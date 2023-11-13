@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+
+@section Scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+        
+    function validateForm() {
+        if ($('#txtFolderPath').val() == '') {
+            alert('Please enter valid path.');
+            return false;
+        }
+
+        else {
+            processfolder();
+        }
+    }
+
+    function processfolder() {
+        $.ajax({
+            url: "/FileWatcherUI/ProcessFolder?folderPath=" + $('#txtFolderPath').val(),
+            async: true,
+            dataType: 'json',
+            success: function (data) {
+                if (data == 'Error') {
+                    alert('Path does not exist.');
+                }
+                else {
+                    window.location.href = '/FileWatcherUI/ShowFiles';
+                }
+            }
+        });
+    }
+    
+</script>
+}
+<body>
+    <h1 align="center">File Watcher</h1>
+    <br />
+    <p align="center" style="font-size: x-large">This application demonstrates reading and listing of file metadata from a selected folder.</p>
+    <br />
+    <div align="justify">
+        <p style="font-size: large">Features Supported</p>
+        <div>
+            <ul style="color: darkgray">
+                <li>Sorting and Searching of data in tables.</li>
+                <li>Logging of events.</li>
+                <li>Error handling.</li>
+                <li>Unit Tests.</li>
+            </ul>
+        </div>
+    </div>
+    <div align="center">
+
+        <span>Please enter a valid path</span>
+        <br />
+        <input type="text" name="txtFolderPath" id="txtFolderPath" value="@ViewBag.DefaultPath" style="width: 900px;" /> <br />
+        <i>Please mention default path under [appsetting] under FolderSetting/FolderPath </i>
+
+        <br />
+        <br />
+        <button class="btn btn-primary" type="submit" id="btnContinue" onclick="return validateForm();">Continue</button>
+
+    </div>
+</body>
+</html>
